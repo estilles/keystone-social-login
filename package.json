@@ -1,0 +1,46 @@
+{
+  "name": "keystone-social-login",
+  "version": "0.0.0",
+  "description": "Social login plugin for KeystoneJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha ./test -R spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JohnnyEstilles/keystone-social-login.git"
+  },
+  "keywords": [
+    "keystonejs",
+    "google",
+    "passport",
+    "authentication"
+  ],
+  "author": "Johnny Estilles <johnny.estilles@agentia.asia>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JohnnyEstilles/keystone-social-login/issues"
+  },
+  "homepage": "https://github.com/JohnnyEstilles/keystone-social-login",
+  "dependencies": {
+    "jade": "^1.5.0",
+    "less-middleware": "^1.0.3",
+    "passport": "^0.2.0",
+    "passport-facebook": "^1.0.3",
+    "passport-github": "^0.1.5",
+    "passport-google-oauth": "^0.1.5",
+    "passport-twitter": "^1.0.2",
+    "serve-static": "^1.5.2",
+    "underscore": "^1.6.0"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "gulp": "^3.8.7",
+    "gulp-coverage": "^0.1.24",
+    "gulp-jshint": "^1.8.4",
+    "gulp-mocha": "^0.5.2",
+    "mocha": "^1.21.4",
+    "sinon": "^1.10.3",
+    "sinon-chai": "^2.5.0"
+  }
+}
