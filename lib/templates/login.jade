@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	h1.social-heading Keystone Social Login
+	.social-box
+		a.social-logo(href=signin, title="Signin with Keystone")
+			img(src="/social/images/logo-keystone.png", title="Keystone Logo")
+			p Log in with Keytone
+		each provider in providers
+			- url = '/social/' + provider + '/login'
+			a.social-logo(href=url, title="Signin with #{_(provider).capitalize()}")
+				img(src="/social/images/logo-" + provider + ".png", title="Sign in with #{_(provider).capitalize()}")
+				p Log in with #{_(provider).capitalize()}
