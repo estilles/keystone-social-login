@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master)](https://travis-ci.org/JohnnyEstilles/keystone-social-login)
 
-Keystone Social Login is a [Passport](http://passportjs.org/) authentication plugin for the awesome [KeystoneJS](http://keystonejs.com/). Since Keystone Social Login is kind of a mouthfull, let's call it KSL from now on.
+Keystone Social Login is a [Passport](http://passportjs.org/) authentication plugin for the awesome [KeystoneJS](http://keystonejs.com/). Since Keystone Social Login is kind of a mouthfull, let's call it *KSL* from now on.
 
-KSL is a plugin that allows you to easily Passport-enable your Keystone applications. The initial release of KSL (`0.1.0`) only supports the following Passort strategies.
+*KSL* is a plugin that allows you to easily Passport-enable your Keystone applications. The initial release of *KSL* (`0.1.0`) only supports the following Passort strategies.
 
 * Facebook OAuth 2.0 with [passport-facebook](https://github.com/jaredhanson/passport-facebook)
 * Google OAuth 2.0 with [passport-google-oauth](https://github.com/jaredhanson/passport-google-oauth)
@@ -13,14 +13,90 @@ KSL is a plugin that allows you to easily Passport-enable your Keystone applicat
 
 >More strategies will be added in future releases.
 
-## Usage
-KSL is incredibly easy to use. With four simple steps you can Passport-enable your Keystone application.
+## How it works
+*KSL* injects itself into your Keystone application and intercepts the standard Keystone login view, replacing it with its own.
 
-1. Require KSL in your `keystone.js` file (or whatever file you use to configure your Keystone app).
+### New Login View
+The *KSL Login View* provides icons/links to each of the configured login providers, as well as a link to Keystone's default login view. This is then *KSL Login View* when all providers are configured.
+
+![User Fields](http://res.cloudinary.com/agentia/image/upload/v1408407828/keystone-social-login/login.png)
+
+### Automatic Passport Configuration
+*KSL* also configures passport for you, and it creates routes login and callback routes for each configured provider. The login and callback routes follow the patterns `/social/<provider name>/login` and `/social/<provider name>/callback`, respectively.  Below is a list of the routes created for each provider.
+
+    Provider    Login route             Callback route
+    ----------  ----------------------- --------------------------    
+    Facebook    /social/facebook/login  /social/facebook/callback
+    GitHub      /social/github/login    /social/gihub/callback
+    Google      /social/google/login    /social/google/callback
+    Twitter     /social/twitter/login   /social/twitter/callback
+    
+You may use these routes when configuring your Oauth provider, or you can specify your own custom routes paths (see *providers* under *Configuration Options* below.) The protocol, hostname/port portions of the URLs will default to that of your application (obtained from Express' `request` object). So if your application is running on `http://yourdomain.com:3000` the login and callback URLs will be:
+
+`http://yourdomain.com:3000/social/<provider name>/login`
+
+and
+
+`http://yourdomain.com:3000/social/<provider name>/calback`.
+
+### Automatic Updates to User List/Schema
+For every provider configured, *KSL* adds a Keystone Field to the *User List* that represents a user-friendly unique ID for the user. Each of these fields, which I call the *Provider Login Ids*, corresponds to the user's actual login/user ID for each provider and will be used as an alternate lookup field when a user signs in with a social media account and *KSL* is unable to locate the User document using the numeric profile ID.  
+
+You can use the *Provider Login Ids* to pre-authorize user login with one or more providers. Here's a list of all the *Provider Login Id* fields along with the corresponding profile field to which they map for every each provider.
+
+    Provider    User Field          Mapped to (Provider Profile)
+    ----------  ------------------  ---------------------------------
+    Facebook    facebookLoginId     Facebook Profile E-Mail Address
+    GitHub      githubLoginId       GitHub Login Name
+    Google      googleLoginId       Google E-Mail Address
+    Twitter     twitterLoginId      Twitter Screen Name
+
+These fields will appear in the Keystone Admin UI as follows:
+
+![User Fields](http://res.cloudinary.com/agentia/image/upload/v1408407827/keystone-social-login/user-fields.png)
+
+
+The *Provider Login Ids* are named using the pattern `<provider>LoginId`. Depending on which providers you configure, one or more of the following fields will be added to you Keystone *User List*.
+
+    // for Facebook
+    facebookLoginId { type: String, label: 'Facebook E-Mail', width: 'medium', initial: true, index: true }
+    
+    // for GitHub
+    githubLoginId { type: String, label: 'GitHub Login', width: 'medium', initial: true, index: true }
+    
+    // for Google
+    googleLoginId { type: String, label: 'Google E-Mail', width: 'medium', initial: true, index: true }
+    
+    // for Twitter
+    twitterLoginId { type: String, label: 'Twitter Screen Name', width: 'medium', initial: true, index: true }
+
+In addition to the *Provider Login Ids* fields, *KSL* will add the following fields to the *User List* `schema` for every provider configured.  These fields are retrieved from the provider profile and updated every time the user signs in with the corresponding profile. 
+
+    social: {
+        <provider>: {
+    		id: { type: String, index: true },
+    		name: { type: String },
+    		email: { type: String },
+    		photoUrl : { type: String },
+    		profileUrl : { type: String },
+    		accessToken: { type: String },
+    		refreshToken: { type: String }
+    	}          
+    }
+  
+> NOTES:
+> 
+> - The *Twitter* Oauth provider does not return an e-mail address, so `social.twitter.email` will always be `null`.
+> - Not all providers return a *refreshToken*. When not available `social.<provider>.refreshToken` will be `null`.
+
+## Usage
+*KSL* is incredibly easy to use. With four simple steps you can Passport-enable your Keystone application.
+
+1. Require *KSL* in your `keystone.js` file (or whatever file you use to configure your Keystone app).
 
         var social = require('keystone-social-login');
 
-2. Configure the KSL plugin (after your `keystone.init()`)
+2. Configure the *KSL* plugin (after your `keystone.init()`)
 
         keystone.init(...);
         ...
@@ -46,7 +122,7 @@ KSL is incredibly easy to use. With four simple steps you can Passport-enable yo
             }
         });
 
-3. Inject KSL in your `user model` (after defining the list, but before registering it). You must require KSL in your model as well.
+3. Inject *KSL* in your `user model` (after defining the list, but before registering it). You must require *KSL* in your model as well.
     
         var social = require('keystone-social-login');
         ...
@@ -62,7 +138,7 @@ KSL is incredibly easy to use. With four simple steps you can Passport-enable yo
         ...
         User.register();
 
-4. Start the KSL plugin (after setting your app's routes, but before starting Keystone).
+4. Start the *KSL* plugin (after setting your app's routes, but before starting Keystone).
 
         keystone.set('routes', require('./routes'));
         ...
@@ -74,7 +150,7 @@ That's it! It's just that simple.
 
 ### Installation
 
-KSL is currently not available on [npm](https://www.npmjs.org/). In order to use in your projects you need to include the dependency in your `package.json` file by pointing to the KSL master on GitHub, as follows:
+*KSL* is currently not available on [npm](https://www.npmjs.org/). In order to use in your projects you need to include the dependency in your `package.json` file by pointing to the *KSL* master on GitHub, as follows:
 
     "dependencies": {
         ...
@@ -82,32 +158,10 @@ KSL is currently not available on [npm](https://www.npmjs.org/). In order to use
         ...
     }
 
-> [KeystoneJS](http://keystonejs.com/) is in the middle of a massive overhaul, that includes the incorporation of a plugin architecture. We have decide to defer the publishing of KSL on [npm](https://www.npmjs.org/) until after he completion of the plugin architecture. You can follow the discussion on [Keystone Issue #535](https://github.com/JedWatson/keystone/issues/535).
-
-### How it works
-KSL injects itself into your Keystone application and intercepts the standard Keystone login view, replacing it with its own.
-
-The KSL login view provides icons/links to each of the configured login providers, as well as a link to Keystone's default login view.
-
-KSL also configures passport for you, and it creates routes login and callback routes for each configured provider. The login and callback routes follow the patterns `/social/<provider name>/login` and `/social/<provider name>/callback`, respectively.  Below is a list of the routes created for each provider.
-
-    Provider    Login route             Callback route
-    ----------  ----------------------- --------------------------    
-    Facebook    /social/facebook/login  /social/facebook/callback
-    GitHub      /social/github/login    /social/gihub/callback
-    Google      /social/google/login    /social/google/callback
-    Twitter     /social/twitter/login   /social/twitter/callback
-    
-You may use these routes when configuring your Oauth provider, or you can specify custom your own custom routes (see *providers* under *Configuration Options* below.) The protocol, hostname/port portions of the URLs will default to that of your application (obtained from Express' `request` object). So if your application is running on `http://yourdomain.com:3000` the login and callback URLs will be:
-
-`http://yourdomain.com:3000/social/<provider name>/login`
-
-and
-
-`http://yourdomain.com:3000/social/<provider name>/calback`.
+> [KeystoneJS](http://keystonejs.com/) is in the middle of a massive overhaul, that includes the incorporation of a plugin architecture. We have decide to defer the publishing of *KSL* on [npm](https://www.npmjs.org/) until after he completion of the plugin architecture. You can follow the discussion on [Keystone Issue #535](https://github.com/JedWatson/keystone/issues/535).
 
 ### Configuration Options
-KSL offers a number of configuration options. The options can be configured using the `.config()` method or the `.set()` method.
+*KSL* offers a number of configuration options. The options can be configured using the `.config()` method or the `.set()` method.
 
     social.config({
         keystone: keystone,
@@ -130,20 +184,23 @@ KSL offers a number of configuration options. The options can be configured usin
         google: { ... },
         twitter: { ... }
     });
+    social.init()
+
+The `.config()` method automatically calls the `.init()` method. If you prefer to use the `.set()` method make sure you call the `.init()` method once you're done.
 
 Below is a comprehensive list of all the available options.
 
-`keystone` *(required)* `object` - must be set to your Keystone object. This option is REQUIRED. KSL will not work without it.
+`keystone` *(required)* `object` - must be set to your Keystone object. This option is REQUIRED. *KSL* will not work without it.
 
 `signin url` *(optional)* `string` - allows you to specify a custom signin view. It defaults to `/social/login`. The default view is visually similar to Keystone's default login view, but displays icons/links to each of the configured providers, along with a link to Keystone's original login view. 
 
-`auto create user` *(optional)* `boolean` - tells KSL whether or not to automatically create users who successfully log in with their social media account, but do not have a Keystone user account. It defaults to `false`. Accounts created this option is set to `true` will be created with `isAdmin` set to `false`.  
+`auto create user` *(optional)* `boolean` - tells *KSL* whether or not to automatically create users who successfully log in with their social media account, but do not have a Keystone user account. It defaults to `false`. Accounts created this option is set to `true` will be created with `isAdmin` set to `false`.  
 
-`onAuthenticate` *(optional)* `function` - allows you to specify a custom callbacl function to be called by Passport upon successfull social login authentication. Only use this if you want to override KSL's default behavior. This callback is invoked with the following arguments.
+`onAuthenticate` *(optional)* `function` - allows you to specify a custom callbacl function to be called by Passport upon successfull social login authentication. Only use this if you want to override *KSL's* default behavior. This callback is invoked with the following arguments.
 
     callback(req, accessToken, refreshToken, profile, done);
     
-`providers` *(required)* `object` - used to enable each of the available login providers. At least one provider must be enable for KSL to work. Each provider can be configured the following settings.
+`providers` *(required)* `object` - used to enable each of the available login providers. At least one provider must be enable for *KSL* to work. Each provider can be configured the following settings.
 
 1. `clientID` *(required)* `string` - the client ID assigned to your app by the Oauth provider.
 2. `clientSecret` *(required)* `string` - the client secret assigned to your app by the Oauth provider.
@@ -189,7 +246,7 @@ The currently available provider names are: `facebook`, `github`, `google` and `
         }
     }
 
-By default, KSL adds the following addition provider specific options.
+By default, *KSL* adds the following *additional* provider specific options.
 
 *Facebook*
 
@@ -215,22 +272,26 @@ Twitter
     NONE
 
 
-
 ### The KSL API
-KSL has a very simple API. Most of these methods have already been mentioned above.
+*KSL* has a very simple API. Most of these methods have already been mentioned above.
 
 #### .set()
-Sets a KSL configuration option. For a list of available options see *Configuration Options* above.
+Sets a *KSL* configuration option. For a list of available options see *Configuration Options* above.
 
     social.set(<option>, <value>);
 
 #### .get()
-Returns the current value any KSL configuration option. For a list of available options see *Configuration Options* above.
+Returns the current value any *KSL* configuration option. For a list of available options see *Configuration Options* above.
 
     variable = social.get(<option>);
 
+#### .init
+Initializes *Passport* within *KSL*. The `.init()` method is automatically called by the `.config()` method below. You ONLY need to use this method if you use `.set()` to configure *KSL* instead of the `.config()`.
+
+    social.init()
+
 #### .config()
-Set multiple KSL configuration options in one call.
+Set multiple *KSL* configuration options in one call.
 
     social.config({
         <option1>: <value1>,
@@ -240,12 +301,12 @@ Set multiple KSL configuration options in one call.
     });
 
 #### .start()
-Enables KSL once it has been properly configured.
+Enables *KSL* once it has been properly configured.
 
     social.start();
 
 ## Techonogies
-These are just a few of the technologies I used in the development of KSL.
+These are just a few of the technologies I used in the development of *KSL*.
 
 * [KeystoneJS](http://keystonejs.com/)
 * [PassportJS](http://passportjs.org/)
