@@ -31,13 +31,13 @@ The *KSL Login View* provides icons/links to each of the configured login provid
     Google      /social/google/login    /social/google/callback
     Twitter     /social/twitter/login   /social/twitter/callback
     
-You may use these routes when configuring your Oauth provider, or you can specify your own custom routes paths (see *providers* under *Configuration Options* below.) The protocol, hostname/port portions of the URLs will default to that of your application (obtained from Express' `request` object). So if your application is running on `http://yourdomain.com:3000` the login and callback URLs will be:
+You may use these routes when configuring your Oauth provider, or you can specify your own custom routes paths (see *providers* under *Configuration Options* below.) The protocol and hostname/port portions of the URLs will default to that of your application (obtained from Express' `request` object). So if your application is running on `http://yourdomain.com:3000` the login and callback URLs will be:
 
-`http://yourdomain.com:3000/social/<provider name>/login`
+`http://yourdomain.com:3000/social/<provider>/login`
 
 and
 
-`http://yourdomain.com:3000/social/<provider name>/calback`.
+`http://yourdomain.com:3000/social/<provider>/callback`.
 
 ### Automatic Updates to User List/Schema
 For every provider configured, *KSL* adds a Keystone Field to the *User List* that represents a user-friendly unique ID for the user. Each of these fields, which I call the *Provider Login Ids*, corresponds to the user's actual login/user ID for each provider and will be used as an alternate lookup field when a user signs in with a social media account and *KSL* is unable to locate the User document using the numeric profile ID.  
