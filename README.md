@@ -254,8 +254,8 @@ callback(req, accessToken, refreshToken, profile, done);
  4. `done` is a callback completion function, called as follows: `done(err, user)`. It informs Passport when you function is, well, done! Pass an `Error` object in `err` when you wish to signal that an error occured, and a `User` object to tell Passport which user to log in.
 
 > NOTE: Only use this if you need to override *KSL's* default authentication behavior.
-    
-`providers` *(required)* `object` - used to enable each of the available login providers. At least one provider must be enable for *KSL* to work. The providers object should be configured as follows:
+
+<a name="providers"></a>`providers` *(required)* `object` - used to enable each of the available login providers. At least one provider must be enable for *KSL* to work. The providers object should be configured as follows:
     
 ```JavaScript
 providers: {
