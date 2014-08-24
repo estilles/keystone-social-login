@@ -1,6 +1,6 @@
 # Keystone Social Login (KSL)
 
-[![Build Status](https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master)](https://travis-ci.org/JohnnyEstilles/keystone-social-login)
+[![Build Status](https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master)](https://travis-ci.org/JohnnyEstilles/keystone-social-login) [![Dependency Status](https://david-dm.org/JohnnyEstilles/keystone-social-login.svg)](https://david-dm.org/JohnnyEstilles/keystone-social-login)
 
 Keystone Social Login is a [Passport](http://passportjs.org/) authentication plugin for the awesome [KeystoneJS](http://keystonejs.com/). Since Keystone Social Login is kind of a mouthfull, let's call it *KSL* from now on.
 
