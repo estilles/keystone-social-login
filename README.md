@@ -195,7 +195,7 @@ That's it! It's just that simple.
 ```JSON
 {
     "dependencies": {
-        "keytone-social-login": "https://github.com/JohnnyEstilles/keystone-social-login.git#master",
+        "keystone-social-login": "https://github.com/JohnnyEstilles/keystone-social-login.git#master",
     }
 }
 ```
