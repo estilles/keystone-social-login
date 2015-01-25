@@ -24,14 +24,14 @@
   "homepage": "https://github.com/JohnnyEstilles/keystone-social-login",
   "dependencies": {
     "jade": "^1.5.0",
-    "less-middleware": "^1.0.3",
-    "passport": "^0.2.0",
+    "less-middleware": "^1.0.4",
+    "passport": "^0.2.1",
     "passport-facebook": "^1.0.3",
     "passport-github": "^0.1.5",
     "passport-google-oauth": "^0.1.5",
     "passport-twitter": "^1.0.2",
-    "serve-static": "^1.5.2",
-    "underscore": "^1.6.0"
+    "serve-static": "^1.8.1",
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",
