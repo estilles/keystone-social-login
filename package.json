@@ -24,7 +24,7 @@
   "homepage": "https://github.com/JohnnyEstilles/keystone-social-login",
   "dependencies": {
     "jade": "^1.5.0",
-    "less-middleware": "^1.0.4",
+    "less-middleware": "^2.0.0",
     "passport": "^0.2.1",
     "passport-facebook": "^1.0.3",
     "passport-github": "^0.1.5",
@@ -34,7 +34,7 @@
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
+    "chai": "^2.0.0",
     "gulp": "^3.8.10",
     "gulp-coverage": "^0.3.32",
     "gulp-jshint": "^1.9.0",
