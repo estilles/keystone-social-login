@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master)](https://travis-ci.org/JohnnyEstilles/keystone-social-login) [![Dependency Status](https://david-dm.org/JohnnyEstilles/keystone-social-login.svg)](https://david-dm.org/JohnnyEstilles/keystone-social-login)
 
+>WARNING: KSL is not yet compatible with the last Keystone release (0.3.1). It is, however, still compatible with release 0.2.42. While my intent is to updated KSL to work with Keystone 0.3.x, such updated is pending Keystone's decision to officially implement a [plugin architecture](https://github.com/keystonejs/keystone/issues/912). Once this issue is resolved I will continue development of KSL.
+
 Keystone Social Login is a [Passport](http://passportjs.org/) authentication plugin for the awesome [KeystoneJS](http://keystonejs.com/). Since Keystone Social Login is kind of a mouthfull, let's call it *KSL* from now on.
 
 *KSL* is a plugin that allows you to easily Passport-enable your Keystone applications. The initial release of *KSL* (`0.1.0`) only supports the following Passort strategies.
