@@ -1,5 +1,9 @@
 # Keystone Social Login
 
+## v0.1.3 / 2015-02-23
+
+* adding Node.js 0.12 to Travis-CI config
+
 ## v0.1.2 / 2015-02-23
 
 * adding compatibility warning with [Keystone 0.3.x](http://keystonejs.com/)
