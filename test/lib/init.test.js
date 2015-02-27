@@ -16,7 +16,6 @@ describe('.init()', function () {
 		social = SocialLogin();
 
 		error = sinon.stub(social, '__error');
-		error.throws();
 
 		keystone = {
 			get: sinon.stub(),
@@ -31,19 +30,20 @@ describe('.init()', function () {
 	});
 
 	describe('when not configured correctly', function() {
+		afterEach(function() {
+			error.reset();
+		})
 
 		it('should error if "keystone" not set to an object', function () {
-			expect(function() {
-				social.init();
-			}).to.throw();
+			social.init();
+			expect(error).to.have.been.called.once;
 			expect(error).to.have.been.calledWithExactly('Configuration missing "keystone" object', 'ConfigError');
 		});
 
 		it('should error if no providers have been configured', function () {
-			expect(function() {
-				social.set('keystone', keystone);
-				social.init();
-			}).to.throw();
+			social.set('keystone', keystone);
+			social.init();
+			expect(error).to.have.been.called.once;
 			expect(error).to.have.been.calledWithExactly('No providers configured. You must configure at least one provider.', 'ConfigError');
 		});
 
