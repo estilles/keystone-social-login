@@ -34,7 +34,7 @@
     "underscore": "^1.8.2"
   },
   "devDependencies": {
-    "chai": "^2.1.2",
+    "chai": "^2.2.0",
     "gulp": "^3.8.10",
     "gulp-coverage": "^0.3.32",
     "gulp-jshint": "^1.9.4",
