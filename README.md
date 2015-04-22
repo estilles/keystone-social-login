@@ -1,17 +1,18 @@
 # Keystone Social Login (KSL)
 
-[![Build Status](https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master)](https://travis-ci.org/JohnnyEstilles/keystone-social-login) [![Dependency Status](https://david-dm.org/JohnnyEstilles/keystone-social-login.svg)](https://david-dm.org/JohnnyEstilles/keystone-social-login)
+[![Build Status][travis-badge]][travis-url]
+[![Dependency Status][dm-badge]][dm-url]
 
->WARNING: KSL is not yet compatible with the last Keystone release (0.3.1). It is, however, still compatible with release 0.2.42. While my intent is to updated KSL to work with Keystone 0.3.x, such updated is pending Keystone's decision to officially implement a [plugin architecture](https://github.com/keystonejs/keystone/issues/912). Once this issue is resolved I will continue development of KSL.
+>WARNING: KSL is not yet compatible with the last Keystone release (0.3.x). It is, however, still compatible with release 0.2.42. While my intent is to updated KSL to work with Keystone 0.3.x, such updated is pending Keystone's decision to officially implement a [plugin architecture][keystone-issue-912]. Once this issue is resolved I will continue development of KSL.
 
-Keystone Social Login is a [Passport](http://passportjs.org/) authentication plugin for the awesome [KeystoneJS](http://keystonejs.com/). Since Keystone Social Login is kind of a mouthfull, let's call it *KSL* from now on.
+Keystone Social Login is a [Passport][passport] authentication plugin for the awesome [KeystoneJS][keystone]. Since Keystone Social Login is kind of a mouthful, let's call it *KSL* from now on.
 
-*KSL* is a plugin that allows you to easily Passport-enable your Keystone applications. The initial release of *KSL* (`0.1.0`) only supports the following Passort strategies.
+*KSL* is a plugin that allows you to easily Passport-enable your Keystone applications. The initial release of *KSL* (`0.1.0`) only supports the following Passport strategies.
 
-* Facebook OAuth 2.0 with [passport-facebook](https://github.com/jaredhanson/passport-facebook)
-* Google OAuth 2.0 with [passport-google-oauth](https://github.com/jaredhanson/passport-google-oauth)
-* GitHub OAuth 2.0 with [passport-github](https://github.com/jaredhanson/passport-github)
-* Twitter OAuth with [passport-twitter](https://github.com/jaredhanson/passport-twitter)
+* Facebook OAuth 2.0 with [passport-facebook][passport-facebook]
+* Google OAuth 2.0 with [passport-google-oauth][passport-google-oauth]
+* GitHub OAuth 2.0 with [passport-github][passport-github]
+* Twitter OAuth with [passport-twitter][passport-twitter]
 
 >More strategies will be added in future releases.
 
@@ -21,18 +22,18 @@ Keystone Social Login is a [Passport](http://passportjs.org/) authentication plu
 ### New Login View
 The *KSL Login View* provides icons/links to each of the configured login providers, as well as a link to Keystone's default login view. This is the *KSL Login View* when all providers are configured.
 
-![User Fields](http://res.cloudinary.com/agentia/image/upload/v1408407828/keystone-social-login/login.png)
+![Login View][ksl-login-view]
 
 ### Automatic Passport Configuration
 *KSL* also configures passport for you, and creates login and callback routes for each configured provider. The login and callback routes follow the patterns `/social/<provider>/login` and `/social/<provider>/callback`, respectively.  Below is a list of the default routes created for each provider.
 
 Provider   | Login route             | Callback route
----------- | ----------------------- | --------------------------    
+---------- | ----------------------- | --------------------------
 Facebook   | /social/facebook/login  | /social/facebook/callback
 GitHub     | /social/github/login    | /social/github/callback
 Google     | /social/google/login    | /social/google/callback
 Twitter    | /social/twitter/login   | /social/twitter/callback
-    
+
 You should use these routes when configuring your Oauth provider. However, if you prefer, you can specify your own custom routes paths (see [providers](#providers) under [Configuration Options](#configuration-options) below.) As you can see, only the path portion of the URL needs to be provided to *KSL*. The protocol and hostname/port portions of the URLs will default to that of your application (obtained from the Express `request` object). So if your application is running on `http://yourdomain.com:3000` the login and callback URLs will be:
 
 `http://yourdomain.com:3000/social/<provider>/login`
@@ -52,19 +53,19 @@ Facebook   | facebookLoginId    | Facebook Profile E-Mail Address
 GitHub     | githubLoginId      | GitHub Login Name
 Google     | googleLoginId      | Google E-Mail Address
 Twitter    | twitterLoginId     | Twitter Screen Name
-    
+
 > NOTE: `facebookLoginId` was originally mapped to the Facebook `username` field, wich is now deprecated as of Facebook Platform API version 2.0. This has forced me to use the Facebook profile `email` address. Unfortunately, the availability of the user's Facebook profile `email` address will be dependent on the user's Facebook profile security settings. Therefore, if a user disallows access to his e-mail address on his Facebook profile it will not be possible to pre-authorize login to Keystone using this individual's Facebook e-mail.  
 
 These fields will appear in the Keystone Admin UI as follows:
 
-![User Fields](http://res.cloudinary.com/agentia/image/upload/v1408407827/keystone-social-login/user-fields.png)
+![User Fields][ksl-user-fields]
 
 Depending on which providers you configure, one or more of the following fields will be added to you Keystone *User List*.
 
 *For Facebook:*
 ```JavaScript
 facebookLoginId: {
-    type: String, 
+    type: String,
     label: 'Facebook E-Mail',
     width: 'medium',
     initial: true,
@@ -102,7 +103,7 @@ twitterLoginId: {
 }
 ```
 
-In addition to the *Provider Login Id* fields, *KSL* will add the following fields to the *User List* `schema` for every provider configured.  These fields are retrieved from the user's profile and updated during the authentication process. 
+In addition to the *Provider Login Id* fields, *KSL* will add the following fields to the *User List* `schema` for every provider configured.  These fields are retrieved from the user's profile and updated during the authentication process.
 
 ```JavaScript
 social: {
@@ -114,12 +115,12 @@ social: {
 		profileUrl : { type: String },
 		accessToken: { type: String },
 		refreshToken: { type: String }
-	}          
+	}
 }
-```    
- 
+```
+
 > NOTES:
-> 
+>
 > - The *Twitter* Oauth provider does not return an e-mail address, so `social.twitter.email` will always be `null`.
 > - Not all providers return a *refreshToken*. When not available, `social.<provider>.refreshToken` will be `null`.
 
@@ -192,17 +193,13 @@ That's it! It's just that simple.
 
 ### Installation
 
-*KSL* is currently not available on [npm](https://www.npmjs.org/). In order to use in your projects you need to manually include a dependency in your `package.json` file, pointing to the *KSL* master branch on GitHub.
+*KSL* is currently not available on [npm][npm]. In the meantime you can install it directly from this repository.
 
-```JSON
-{
-    "dependencies": {
-        "keystone-social-login": "git+https://github.com/JohnnyEstilles/keystone-social-login.git#master",
-    }
-}
+```
+npm install --save JohnnyEstilles/keystone-social-login
 ```
 
-> [KeystoneJS](http://keystonejs.com/) is in the middle of a massive overhaul, that includes the incorporation of a plugin architecture. We have decide to defer the publishing of *KSL* on [npm](https://www.npmjs.org/) until after he completion of the plugin architecture. You can follow the discussion on [Keystone Issue #503](https://github.com/JedWatson/keystone/issues/503).
+> [KeystoneJS][keystone] is in the middle of a massive overhaul, that includes the incorporation of a plugin architecture. We have decide to defer the publishing of *KSL* on [npm](https://www.npmjs.org/) until after he completion of the plugin architecture. <del>You can follow the discussion on [Keystone Issue #503](https://github.com/JedWatson/keystone/issues/503).</del> Discussion of Keystone's plugin architecture was moved to [Issue #912][keystone-issue-912].
 
 ### Configuration Options
 *KSL* offers a number of configuration options. The options can be configured using the `.config()` method or the `.set()` method.
@@ -218,7 +215,7 @@ social.config({
         twitter: { ... }
     }
 });
-```    
+```
 or
 ```JavaScript
 social.set('keystone', keystone);
@@ -238,7 +235,7 @@ Below is a comprehensive list of all the available options.
 
 `keystone` *(required)* `object` - must be set to your Keystone object. This option is REQUIRED. *KSL* will not work without it.
 
-`signin url` *(optional)* `string` - allows you to specify a custom signin view. It defaults to `/social/login`. The default view is visually similar to Keystone's default login view, but displays icons/links to each of the configured providers, along with a link to Keystone's original login view. A preview of the default login view is displayed above in the *New Login View* section. 
+`signin url` *(optional)* `string` - allows you to specify a custom signin view. It defaults to `/social/login`. The default view is visually similar to Keystone's default login view, but displays icons/links to each of the configured providers, along with a link to Keystone's original login view. A preview of the default login view is displayed above in the *New Login View* section.
 
 `auto create user` *(optional)* `boolean` - tells *KSL* whether or not to automatically create users who successfully log in with their social media account, but do not have a Keystone user account. It defaults to `false`. Accounts created this option is set to `true` will be created with `isAdmin` set to `false`, as well as the `name` and `email` fields set to their corresponding values in the provider's profile (when available).  
 
@@ -247,9 +244,9 @@ Below is a comprehensive list of all the available options.
 ```JavaScript
 callback(req, accessToken, refreshToken, profile, done);
 ```
- 
+
  Where:
- 
+
  1. `req` is the request object
  2. `accessToken` is a `string` containing the provider supplied access token
  3. `refreshToken` is a `string` containing the provider supplied refresh token (if one is available)
@@ -258,7 +255,7 @@ callback(req, accessToken, refreshToken, profile, done);
 > NOTE: Only use this if you need to override *KSL's* default authentication behavior.
 
 <a name="providers"></a>`providers` *(required)* `object` - used to enable each of the available login providers. At least one provider must be enable for *KSL* to work. The providers object should be configured as follows:
-    
+
 ```JavaScript
 providers: {
     <name>: {
@@ -271,7 +268,7 @@ providers: {
     }
 }
 ```
-    
+
 Each provider can be configured the following settings.
 
 1. `clientID` *(required)* `string` - the client ID assigned to your app by the Oauth provider.
@@ -288,7 +285,7 @@ Each provider can be configured the following settings.
                 }
             }
         }
-    
+
 4. `additional` *(optional)* `object` - allows you to pass additional provider specific options.
 
         providers: {
@@ -310,19 +307,19 @@ additional: {
 	scope: ['public_profile', 'email'],
 	enableProof: false
 }
-```	
+```
 *GitHub*
 ```JavaScript
 additional: {
 	scope: [ 'user:email' ]
 }
-```	
+```
 *Google*
 ```JavaScript
 additional: {
 	scope: ['profile', 'email']
 }
-```	
+```
 *Twitter*
 ```
 NONE
@@ -366,36 +363,56 @@ Enables *KSL* once it has been properly configured.
 social.start();
 ```
 
-## Technologies
-These are just a few of the technologies I used in the development of *KSL*.
-
-* [KeystoneJS](http://keystonejs.com/)
-* [PassportJS](http://passportjs.org/)
-* [Underscore.js](http://underscorejs.org/)
-* [Jade](http://jade-lang.com/)
-* [{less}](http://lesscss.org/)
-* [gulp.js](http://gulpjs.com/)
-* [Mocha](http://visionmedia.github.io/mocha/)
-* [Chai](http://chaijs.com/)
-* [Sinon.js](http://sinonjs.org/)
-
 ## Thanks
 
-Special thanks to [@jedwatson](http://twitter.com/jedwatson), [@bladey](http://twitter.com/bladey) and [@jossmackison](http://twitter.com/jossmackison) at [Thinkmill](http://www.thinkmill.com.au/) for creating [KeystoneJS](http://keystonejs.com/), as well as to the rest of the [KeystoneJS contributors](https://github.com/JedWatson/keystone/graphs/contributors).
+Special thanks to [@jedwatson][jedwatson], [@bladey][bladey] and [@jossmackison][jossmackison] at [Thinkmill][thinkmill] for creating [KeystoneJS][keystone], as well as to the rest of the [KeystoneJS contributors][keystone-contributors].
 
-Many thanks to Jared Hanson of [Helixent Technologies, LLC](http://www.helixent.com/) for his work on [PassportJS](http://passportjs.org/) and all the Passport strategies used in this project.
+Many thanks to Jared Hanson of [Helixent Technologies, LLC][helixent] for his work on [PassportJS][passport] and all the Passport strategies used in this project.
 
 My thanks also to Sharad Kumar ([@eJugnoo](http://twitter.com/eJugnoo)) for helping me proofread my docs. (I'm the worst proofreader ever!)
 
-And finally, my thanks to Julien Loutre of [Twenty-Six medias, Inc.](http://www.twenty-six-medias.com/), whose [Social-Login](https://github.com/26medias/social-login) plugin partially inspired this work.
+And finally, my thanks to Julien Loutre of [Twenty-Six medias, Inc.][26medias], whose [Social-Login][26media-social-login] plugin partially inspired this work.
 
 ## License
 Keystone Social Login is free and open source under the MIT License.
 
-Copyright (c) 2014, Johnny Estilles ([@JohnnyEstilles](http://twitter.com/JohnnyEstilles))
+Copyright (c) 2014, Johnny Estilles ([@JohnnyEstilles][JohnnyEstilles])
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[travis-badge]: https://travis-ci.org/JohnnyEstilles/keystone-social-login.svg?branch=master
+[travis-url]: https://travis-ci.org/JohnnyEstilles/keystone-social-login
+
+[dm-badge]: https://david-dm.org/JohnnyEstilles/keystone-social-login.svg
+[dm-url]: https://david-dm.org/JohnnyEstilles/keystone-social-login
+
+[ksl-login-view]: http://res.cloudinary.com/agentia/image/upload/v1408407828/keystone-social-login/login.png
+[ksl-user-fields]: http://res.cloudinary.com/agentia/image/upload/v1408407827/keystone-social-login/user-fields.png
+
+[keystone]: http://keystonejs.com/
+[keystone-contributors]: https://github.com/keystonejs/keystone/graphs/contributors
+[keystone-issue-912]: https://github.com/keystonejs/keystone/issues/912
+
+[jedwatson]: http://twitter.com/jedwatson
+[bladey]: http://twitter.com/bladey
+[jossmackison]: http://twitter.com/jossmackison
+[thinkmill]: http://www.thinkmill.com.au/
+
+[passport]: http://passportjs.org/
+[passport-facebook]: https://github.com/jaredhanson/passport-facebook
+[passport-google-oauth]: https://github.com/jaredhanson/passport-google-oauth
+[passport-github]: https://github.com/jaredhanson/passport-github
+[passport-twitter]: https://github.com/jaredhanson/passport-twitter
+
+[helixent]: http://www.helixent.com/
+
+[npm]: https://www.npmjs.org/
+
+[26medias]: http://www.twenty-six-medias.com/
+[26medias-social-login]: https://github.com/26medias/social-login
+
+[JohnnyEstilles]: http://twitter.com/JohnnyEstilles
