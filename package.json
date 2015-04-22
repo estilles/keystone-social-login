@@ -1,6 +1,6 @@
 {
   "name": "keystone-social-login",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Social login plugin for KeystoneJS",
   "main": "index.js",
   "scripts": {
