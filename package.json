@@ -30,16 +30,16 @@
     "passport-github": "^0.1.5",
     "passport-google-oauth": "^0.1.5",
     "passport-twitter": "^1.0.2",
-    "serve-static": "^1.8.1",
-    "underscore": "^1.8.2"
+    "serve-static": "^1.9.2",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^2.2.0",
     "gulp": "^3.8.10",
     "gulp-coverage": "^0.3.32",
-    "gulp-jshint": "^1.9.4",
+    "gulp-jshint": "^1.10.0",
     "gulp-mocha": "^2.0.1",
-    "mocha": "^2.2.1",
+    "mocha": "^2.2.4",
     "sinon": "^1.14.1",
     "sinon-chai": "^2.6.0"
   }
