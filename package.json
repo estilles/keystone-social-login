@@ -30,7 +30,7 @@
     "passport-github": "^0.1.5",
     "passport-google-oauth": "^0.1.5",
     "passport-twitter": "^1.0.2",
-    "serve-static": "^1.8.1",
+    "serve-static": "^1.9.2",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
