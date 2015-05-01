@@ -371,7 +371,7 @@ Many thanks to Jared Hanson of [Helixent Technologies, LLC][helixent] for his wo
 
 My thanks also to Sharad Kumar ([@eJugnoo](http://twitter.com/eJugnoo)) for helping me proofread my docs. (I'm the worst proofreader ever!)
 
-And finally, my thanks to Julien Loutre of [Twenty-Six medias, Inc.][26medias], whose [Social-Login][26media-social-login] plugin partially inspired this work.
+And finally, my thanks to Julien Loutre of [Twenty-Six medias, Inc.][26medias], whose [Social-Login][26medias-social-login] plugin partially inspired this work.
 
 ## License
 Keystone Social Login is free and open source under the MIT License.
